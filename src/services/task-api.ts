@@ -1,10 +1,10 @@
 import { Task } from "../components/Todo/List";
 import restApi from "./index";
 
-export async function getProducts(query: string): Promise<Task[]> {
+export async function getTasks(query: string): Promise<Task[]> {
   try {
     return await restApi<Task[]>({
-      endpoint: `products?${query}`,
+      endpoint: `tasks/?${query}`,
       method: "GET",
     });
   } catch (error) {
@@ -13,10 +13,10 @@ export async function getProducts(query: string): Promise<Task[]> {
   }
 }
 
-export async function getProductById(id: number): Promise<Task> {
+export async function getTaskById(id: number): Promise<Task> {
   try {
     return await restApi<Task>({
-      endpoint: `products/${id}`,
+      endpoint: `tasks/${id}`,
       method: "GET",
     });
   } catch (error) {
@@ -25,7 +25,7 @@ export async function getProductById(id: number): Promise<Task> {
   }
 }
 
-export const createTask = async (task: Task): Promise<Task> => {
+export const createTask = async (task: Task): Promise<undefined | Task> => {
   try {
     return await restApi({
       endpoint: `tasks`,
@@ -33,11 +33,11 @@ export const createTask = async (task: Task): Promise<Task> => {
       body: task,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 };
 
-export const updateTask = async (task: Task): Promise<Task> => {
+export const updateTask = async (task: Task): Promise<undefined | Task> => {
   try {
     return await restApi({
       endpoint: `tasks/${task.id}`,
@@ -45,17 +45,17 @@ export const updateTask = async (task: Task): Promise<Task> => {
       body: task,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 };
 
-export const deleteTask = async (taskId: string): Promise<Task> => {
+export const deleteTask = async (taskId: string): Promise<undefined | Task> => {
   try {
     return await restApi({
-      endpoint: `carts/${taskId}`,
+      endpoint: `tasks/${taskId}`,
       method: "DELETE",
     });
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 };

@@ -1,5 +1,6 @@
-import { useId, useState } from "react";
+import { useState } from "react";
 import { Task } from "./List";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   addTask: (data: Task) => void;
@@ -7,9 +8,10 @@ type Props = {
 
 export default function Form({ addTask }: Props) {
   const [content, setContent] = useState("");
-  const id = useId();
+  //   const id = useId();
 
   function handleSubmit() {
+    const id = uuidv4();
     addTask({ id, content, isChecked: false });
     setContent("");
   }

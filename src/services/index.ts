@@ -1,9 +1,9 @@
-const BASE_URL = "http://localhost:4444/api";
+const BASE_URL = "http://localhost:4444";
 
 type RestApiParams = {
   endpoint: string;
   method: "GET" | "POST" | "PUT" | "DELETE";
-  body?: any;
+  body?: unknown;
 };
 
 export default async function restApi<T>({
@@ -11,6 +11,7 @@ export default async function restApi<T>({
   method,
   body,
 }: RestApiParams): Promise<T> {
+  console.log();
   const res = await fetch(`${BASE_URL}/${endpoint}`, {
     method,
     body: body ? JSON.stringify(body) : undefined,
@@ -18,6 +19,8 @@ export default async function restApi<T>({
       "Content-Type": "application/json",
     },
   });
+
+  console.log(res);
 
   if (!res.ok) {
     throw new Error(`HTTP error! status: ${res.status}`);

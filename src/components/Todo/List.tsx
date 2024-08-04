@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "./Form";
 import Item from "./Item";
 import Tool from "./Tool";
 import Blank from "./Blank";
+import { createTask, getTasks, updateTask } from "../../services/task-api";
+// import getQueryString from "../../utils/query";
 
 export type Task = {
   id: string;
@@ -13,8 +15,30 @@ export type Task = {
 export default function List() {
   const [data, setData] = useState<Task[]>([]);
 
+  useEffect(() => {
+    renderTask();
+  }, []);
+
+  async function renderTask() {
+    const Tasks = await getTasks("");
+    setData(Tasks);
+  }
+
   function addTask(newTask: Task) {
-    setData([...data, newTask]);
+    createTask(newTask);
+    renderTask();
+  }
+
+  function handleUpdateTask(taskId: string) {
+    console.log(data);
+
+    data.filter((task) => {
+      if (task.id === taskId) {
+        task.isChecked = !task.isChecked;
+        updateTask(task);
+        renderTask();
+      }
+    });
   }
 
   return (
@@ -27,7 +51,7 @@ export default function List() {
         ) : (
           data.map((task) => (
             <Item
-              key={task.id}
+              handleUpdateTask={handleUpdateTask}
               id={task.id}
               content={task.content}
               isChecked={task.isChecked}

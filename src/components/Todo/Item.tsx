@@ -1,13 +1,16 @@
-import { Task } from "./List";
+type Props = {
+  handleUpdateTask: (id: string) => void;
+  id: string;
+  content: string;
+  isChecked: boolean;
+};
 
-type Props = Task;
-
-export default function Item({ id, content, isChecked }: Props) {
-  function handleChecked() {
-    isChecked = !isChecked;
-    console.log(isChecked);
-  }
-
+export default function Item({
+  handleUpdateTask,
+  id,
+  content,
+  isChecked,
+}: Props) {
   return (
     <div className="task relative flex">
       <label className="container flex h-[26px] items-center gap-[17px] after:absolute after:top-[43px] after:w-[100%] after:border-t after:border-solid after:border-[#6c63ff] after:opacity-50 after:content-['']">
@@ -15,7 +18,9 @@ export default function Item({ id, content, isChecked }: Props) {
           type="checkbox"
           className="check__tasks peer hidden"
           checked={isChecked}
-          onClick={handleChecked}
+          onClick={() => {
+            handleUpdateTask(id);
+          }}
         />
         <span className="border-peri peer-checked:text-peri flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-[2px] border border-solid text-transparent">
           <i className="fa-solid fa-check"></i>
