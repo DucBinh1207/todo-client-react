@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply box-border cursor-pointer rounded-[5px] px-[20px] py-[10px];
+}
+
+.option-filter {
+  @apply bg-transparent;
+}
