@@ -664,6 +664,30 @@ video {
   width: 80%;
 }
 
+.w-\[184px\] {
+  width: 184px;
+}
+
+.w-\[204px\] {
+  width: 204px;
+}
+
+.w-\[800px\] {
+  width: 800px;
+}
+
+.w-\[59px\] {
+  width: 59px;
+}
+
+.w-\[58px\] {
+  width: 58px;
+}
+
+.w-\[100px\] {
+  width: 100px;
+}
+
 .cursor-default {
   cursor: default;
 }
@@ -698,6 +722,10 @@ video {
 
 .gap-\[34px\] {
   gap: 34px;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .overflow-hidden {
