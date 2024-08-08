@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 .btn {
-  @apply box-border cursor-pointer rounded-[5px] px-[20px] py-[10px];
+  @apply  relative box-border cursor-pointer rounded-[5px] border border-solid border-peri px-[20px] py-[10px] transition-all duration-300 ease-in-out  hover:bg-[#5060f5] hover:text-white hover:transition-all hover:duration-300 hover:ease-in-out;
 }
 
 .option-filter {
   @apply bg-transparent;
+}
+
+.paging-btn {
+  @apply relative rounded-[5px] border border-solid border-peri bg-transparent p-[10px] transition-all duration-300 ease-in-out hover:scale-[1.15] hover:border-none hover:bg-[#5060f5] hover:text-white hover:transition-all hover:duration-300 hover:ease-in-out;
 }

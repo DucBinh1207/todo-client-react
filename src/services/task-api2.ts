@@ -5,6 +5,10 @@ export function getTasksApi(paramTool: unknown) {
   return get<Task[]>({ url: "/tasks", params: paramTool });
 }
 
+export function getTaskApi(id: string) {
+  return get<Task>({ url: "/tasks/" + id });
+}
+
 export function addTaskApi(task: Task) {
   return post({ url: "/tasks", data: task });
 }

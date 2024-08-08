@@ -7,6 +7,7 @@ export default {
       colors: {
         peri: "#6c63ff",
         "custom-gray-checked": "rgba(255, 255, 255, 0.5)",
+        "custom-bg": "rgba(255, 255, 255, 0.5)",
       },
       fontFamily: {
         kanit: ["Kanit", "sans-serif"],
