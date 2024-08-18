@@ -22,7 +22,7 @@ export default function AddTodo() {
     const id = uuidv4();
     addTask({ id, content, isChecked: false });
     setContent("");
-    navigate(`tasks/list`);
+    navigate(`../../tasks/list`);
   }
 
   function handleCancel() {

@@ -5,10 +5,13 @@ import "./index.css";
 // import App1 from "./App1.tsx";
 import {
   BrowserRouter,
-//   createBrowserRouter,
-//   RouterProvider,
+  //   createBrowserRouter,
+  //   RouterProvider,
 } from "react-router-dom";
 import AppRouter from "./AppRouter.tsx";
+
+import { Provider } from "react-redux";
+import store from "./store/index.ts";
 
 // const router = createBrowserRouter([
 //   {
@@ -23,6 +26,8 @@ import AppRouter from "./AppRouter.tsx";
 // );
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <AppRouter />
+    <Provider store={store}>
+      <AppRouter />
+    </Provider>
   </BrowserRouter>,
 );

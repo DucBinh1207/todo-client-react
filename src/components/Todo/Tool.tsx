@@ -19,10 +19,11 @@ export default function Tool({ setSearch, setFilter }: props) {
       <select
         name=""
         id=""
+        defaultValue={"all"}
         onChange={(e) => setFilter(e.target.value)}
         className="task__filter btn h-[44px] w-[204px] border border-solid border-peri bg-peri"
       >
-        <option value="all" className="bg-white text-peri" selected>
+        <option value="all" className="bg-white text-peri">
           ALL
         </option>
         <option value="done" className="bg-white text-peri">

@@ -8,6 +8,7 @@ import {
   updateTaskApi,
 } from "../../services/task-api2";
 import Paging from "./Paging";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 // import Modal from "../Modal";
 
 export type Task = {
@@ -17,20 +18,50 @@ export type Task = {
 };
 
 export default function List() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<Task[]>([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [data, setData] = useState<Task[]>([]);
 
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("All");
-  const [paging, setPaging] = useState(1);
-  const [pageNumber, setPageNumber] = useState(0);
+  // const [search, setSearch] = useState("");
+  // const [filter, setFilter] = useState("All");
+  // const [paging, setPaging] = useState(1);
+  // const [pageNumber, setPageNumber] = useState(0);
+
+  const dispatch = useAppDispatch();
+
+  const setData = (data: Task[]) => {
+    dispatch({ type: "tasks/setTasks", payload: data });
+  };
+
+  const setIsLoading = (isLoading: boolean) => {
+    dispatch({ type: "tasks/setIsLoading", payload: isLoading });
+  };
+
+  const setSearch = (search: string) => {
+    dispatch({ type: "tasks/setSearch", payload: search });
+  };
+
+  const setFilter = (filter: string) => {
+    dispatch({ type: "tasks/setFilter", payload: filter });
+  };
+
+  const setPaging = (paging: number) => {
+    dispatch({ type: "tasks/setPaging", payload: paging });
+  };
+
+  const setPageNumber = (pageNumber: number) => {
+    dispatch({ type: "tasks/setPageNumber", payload: pageNumber });
+  };
+
+  const data = useAppSelector((state) => state.tasks.data);
+  const isLoading = useAppSelector((state) => state.tasks.isLoading);
+  const search = useAppSelector((state) => state.tasks.search);
+  const filter = useAppSelector((state) => state.tasks.filter);
+  const paging = useAppSelector((state) => state.tasks.paging);
+  const pageNumber = useAppSelector((state) => state.tasks.pageNumber);
 
   async function getTasks() {
     try {
       setIsLoading(true);
-      // if (paging !== 1 && (search !== "" || filter !== "all")) {
-      //   setPaging(1);
-      // }
       const params = {
         _limit: 10,
         _page: paging,
@@ -39,6 +70,7 @@ export default function List() {
           filter === "done" ? true : filter === "not_done" ? false : undefined,
       };
       const data = await getTasksApi(params);
+
       setData(data);
       setPageNumber(
         Math.ceil(
@@ -65,8 +97,9 @@ export default function List() {
   function updateCheckTask(taskId: string) {
     data.map(async (task) => {
       if (task.id === taskId) {
-        task.isChecked = !task.isChecked;
-        await updateTaskApi(task);
+        const taskUpdate = { ...task };
+        taskUpdate.isChecked = !taskUpdate.isChecked;
+        await updateTaskApi(taskUpdate);
         // updateTask(task);
         getTasks();
       }
@@ -109,6 +142,7 @@ export default function List() {
         ) : (
           data.map((task) => (
             <Item
+              key={task.id}
               handleCheckTask={updateCheckTask}
               handleDeleteTask={handleDeleteTask}
               id={task.id}

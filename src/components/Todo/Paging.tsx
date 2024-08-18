@@ -10,6 +10,7 @@ export default function Paging({ pageNumber, paging, setPaging }: Props) {
       <div className="mt-[50px] flex w-[100%] justify-center gap-[10px] text-[18px] font-medium leading-[100%] text-peri">
         {Array.from({ length: pageNumber }, (_, index) => (
           <button
+            key={index}
             className="paging-btn"
             onClick={() => {
               setPaging(index + 1);

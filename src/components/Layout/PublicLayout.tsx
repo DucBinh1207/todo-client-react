@@ -1,26 +1,6 @@
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function PublicLayout() {
-  const [tab, setTab] = useState<number>(1);
-
-  function handleButtonTab(e: React.MouseEvent<HTMLAnchorElement>) {
-    console.log(e.currentTarget.textContent);
-    switch (e.currentTarget.textContent) {
-      case "Home":
-        setTab(1);
-        break;
-
-      case "Add":
-        setTab(2);
-        break;
-
-      case "Update":
-        setTab(3);
-        break;
-    }
-  }
-
   return (
     <div>
       <div className="z-[-1] flex w-[100%] justify-center">
@@ -30,44 +10,32 @@ export default function PublicLayout() {
               TODO LIST
             </h1>
             <div className="flex gap-[20px]">
-              <div
-                className={`btn text-peri ${tab === 1 ? "bg-peri text-white" : "bg-transparent"}`}
+              <NavLink
+                to="list"
+                className={({ isActive }) =>
+                  `btn text-peri ${isActive ? "bg-peri text-white" : "bg-transparent"}`
+                }
               >
-                <Link
-                  to="list"
-                  onClick={(e) => {
-                    handleButtonTab(e);
-                  }}
-                >
-                  Home
-                </Link>
-              </div>
+                Home
+              </NavLink>
 
-              <div
-                className={`btn text-peri ${tab === 2 ? "bg-peri text-white" : "bg-transparent"}`}
+              <NavLink
+                to="add"
+                className={({ isActive }) =>
+                  `btn text-peri ${isActive ? "bg-peri text-white" : "bg-transparent"}`
+                }
               >
-                <Link
-                  to="add"
-                  onClick={(e) => {
-                    handleButtonTab(e);
-                  }}
-                >
-                  Add
-                </Link>
-              </div>
+                Add
+              </NavLink>
 
-              <div
-                className={`btn text-peri ${tab === 3 ? "bg-peri text-white" : "bg-transparent"}`}
+              <NavLink
+                to="update/:id"
+                className={({ isActive }) =>
+                  `btn text-peri ${isActive ? "bg-peri text-white" : "bg-transparent"}`
+                }
               >
-                <Link
-                  to="update/:id"
-                  onClick={(e) => {
-                    handleButtonTab(e);
-                  }}
-                >
-                  Update
-                </Link>
-              </div>
+                Update
+              </NavLink>
             </div>
           </div>
           <Outlet />

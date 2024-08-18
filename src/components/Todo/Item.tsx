@@ -22,7 +22,7 @@ export default function Item({
           type="checkbox"
           className="check__tasks peer hidden"
           checked={isChecked}
-          onClick={() => {
+          onChange={() => {
             handleCheckTask(id);
           }}
         />
