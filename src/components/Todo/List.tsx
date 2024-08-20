@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Item from "./Item";
 import Tool from "./Tool";
 import Blank from "./Blank";
@@ -9,6 +9,12 @@ import {
 } from "../../services/task-api2";
 import Paging from "./Paging";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  deleteTask,
+  fetchInitialTasks,
+  fetchTasks,
+  updateTask,
+} from "../../store/thunks/task.thunk";
 // import Modal from "../Modal";
 
 export type Task = {
@@ -18,14 +24,6 @@ export type Task = {
 };
 
 export default function List() {
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [data, setData] = useState<Task[]>([]);
-
-  // const [search, setSearch] = useState("");
-  // const [filter, setFilter] = useState("All");
-  // const [paging, setPaging] = useState(1);
-  // const [pageNumber, setPageNumber] = useState(0);
-
   const dispatch = useAppDispatch();
 
   const setData = (data: Task[]) => {
@@ -53,6 +51,7 @@ export default function List() {
   };
 
   const data = useAppSelector((state) => state.tasks.data);
+  const task = useAppSelector((state) => state.tasks.task);
   const isLoading = useAppSelector((state) => state.tasks.isLoading);
   const search = useAppSelector((state) => state.tasks.search);
   const filter = useAppSelector((state) => state.tasks.filter);
@@ -61,7 +60,17 @@ export default function List() {
 
   async function getTasks() {
     try {
-      setIsLoading(true);
+      dispatch(
+        fetchInitialTasks({
+          content_like: search,
+          isChecked:
+            filter === "done"
+              ? true
+              : filter === "not_done"
+                ? false
+                : undefined,
+        }),
+      );
       const params = {
         _limit: 10,
         _page: paging,
@@ -69,24 +78,24 @@ export default function List() {
         isChecked:
           filter === "done" ? true : filter === "not_done" ? false : undefined,
       };
-      const data = await getTasksApi(params);
+      dispatch(fetchTasks(params));
 
-      setData(data);
-      setPageNumber(
-        Math.ceil(
-          (
-            await getTasksApi({
-              content_like: search,
-              isChecked:
-                filter === "done"
-                  ? true
-                  : filter === "not_done"
-                    ? false
-                    : undefined,
-            })
-          ).length / 10,
-        ),
-      );
+      // setData(data);
+      // setPageNumber(
+      //   Math.ceil(
+      //     (
+      //       await getTasksApi({
+      //         content_like: search,
+      //         isChecked:
+      //           filter === "done"
+      //             ? true
+      //             : filter === "not_done"
+      //               ? false
+      //               : undefined,
+      //       })
+      //     ).length / 10,
+      //   ),
+      // );
     } catch (e) {
       // nothing
     } finally {
@@ -99,8 +108,7 @@ export default function List() {
       if (task.id === taskId) {
         const taskUpdate = { ...task };
         taskUpdate.isChecked = !taskUpdate.isChecked;
-        await updateTaskApi(taskUpdate);
-        // updateTask(task);
+        dispatch(updateTask(taskUpdate));
         getTasks();
       }
     });
@@ -108,8 +116,7 @@ export default function List() {
 
   async function handleDeleteTask(taskId: string) {
     try {
-      setIsLoading(true);
-      await deleteTaskApi(taskId);
+      dispatch(deleteTask(taskId));
       getTasks();
     } catch (e) {
       // nothing

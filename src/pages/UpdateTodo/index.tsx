@@ -2,27 +2,29 @@ import { useEffect, useState } from "react";
 import { Task } from "../../components/Todo/List";
 import { getTaskApi, updateTaskApi } from "../../services/task-api2";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getTaskById, updateTask } from "../../store/thunks/task.thunk";
 
 export default function UpdateTodo() {
   const [content, setContent] = useState("");
   const { id } = useParams<{ id: string }>();
-  const [task, setTask] = useState<Task>();
+  // const [task, setTask] = useState<Task>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const task = useAppSelector((state) => state.tasks.task);
 
   async function renderTask() {
     if (id && id !== ":id") {
-      console.log(id);
-      getTaskApi(id);
-      const taskUpdate = await getTaskApi(id);
-      setTask(taskUpdate);
-      setContent(taskUpdate.content);
+      dispatch(getTaskById(id));
+      console.log(task);
     }
   }
 
-  async function updateTask() {
+  async function updateTaskFunc() {
     try {
       if (task && id) {
-        await updateTaskApi(task);
+        // await updateTaskApi(task);
+        dispatch(updateTask(task));
         navigate(`../../tasks/list`);
       }
     } catch (e) {
@@ -38,9 +40,12 @@ export default function UpdateTodo() {
 
   function handleChangeContent() {
     if (task && id) {
-      setTask({
-        ...task,
-        content: content,
+      dispatch({
+        type: "tasks/setTask",
+        payload: {
+          ...task,
+          content: content,
+        },
       });
     }
   }
@@ -48,6 +53,12 @@ export default function UpdateTodo() {
   useEffect(() => {
     renderTask();
   }, []);
+
+  useEffect(() => {
+    if (task) {
+      setContent(task.content);
+    }
+  }, [task]);
 
   useEffect(() => {
     handleChangeContent();
@@ -69,7 +80,7 @@ export default function UpdateTodo() {
         <button
           className="add__btn btn w-[100px] border border-solid border-peri bg-peri hover:border-solid hover:border-white hover:bg-transparent"
           onClick={() => {
-            updateTask();
+            updateTaskFunc();
           }}
           disabled={!content}
         >

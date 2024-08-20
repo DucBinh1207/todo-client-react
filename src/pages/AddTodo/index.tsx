@@ -1,26 +1,19 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Task } from "../../components/Todo/List";
-import { addTaskApi } from "../../services/task-api2";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { addTask } from "../../store/thunks/task.thunk";
 
 export default function AddTodo() {
   const [content, setContent] = useState("");
   const navigate = useNavigate();
-
-  async function addTask(newTask: Task) {
-    try {
-      await addTaskApi(newTask);
-    } catch (e) {
-      // nothing
-    } finally {
-      //nothing
-    }
-  }
+  const dispatch = useAppDispatch();
 
   function handleSubmit() {
     const id = uuidv4();
-    addTask({ id, content, isChecked: false });
+    const newTask: Task = { id, content, isChecked: false };
+    dispatch(addTask(newTask));
     setContent("");
     navigate(`../../tasks/list`);
   }
